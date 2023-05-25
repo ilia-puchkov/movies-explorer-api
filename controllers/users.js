@@ -32,7 +32,7 @@ const getCurrentUser = (req, res, next) => {
     });
 };
 
-// POST (create user / sign-up)
+// POST (create user / signup)
 const createUser = (req, res, next) => {
   const { email, name, password } = req.body;
 
@@ -62,7 +62,7 @@ const createUser = (req, res, next) => {
     });
 };
 
-// POST (login user / sign-in)
+// POST (login user / signin)
 const login = (req, res, next) => {
   const { email, password } = req.body;
 

@@ -42,7 +42,7 @@ const createMovie = (req, res, next) => {
     movieId,
     nameRu,
     nameEn,
-    // owner: req.user._id,
+    owner: req.user._id,
   })
     .then((movie) => {
       res.send(movie);
