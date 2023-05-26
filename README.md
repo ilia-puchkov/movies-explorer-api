@@ -13,5 +13,6 @@
 * Создание фильмов (карточка фильма)
 
 ## Доступ к проекту
-Публичный IP:
-Сервер API: 
+Публичный IP: 158.160.67.25
+
+Сервер API: https://api.movies-reras.students.nomoredomains.rocks/

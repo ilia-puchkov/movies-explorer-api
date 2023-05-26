@@ -1,5 +1,12 @@
 // Allowed addresses
-const allowedCors = ['http://localhost:3000', 'https://localhost:3000', 'http://localhost:3006'];
+const allowedCors = [
+  'http://movies-reras.students.nomoredomains.rocks',
+  'https://movies-reras.students.nomoredomains.rocks',
+  'http://api.movies-reras.students.nomoredomains.rocks',
+  'https://api.movies-reras.students.nomoredomains.rocks',
+  'http://localhost:3000',
+  'https://localhost:3000',
+];
 
 // Cors
 const cors = (req, res, next) => {
