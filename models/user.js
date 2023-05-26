@@ -1,7 +1,7 @@
 // Base modules
 const mongoose = require('mongoose');
-const validator = require('validator');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 // Errors
 const AuthorizationError = require('../errors/AuthorizationError');
@@ -13,25 +13,24 @@ const userSchema = mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isEmail(v),
-      message: 'Неправильный формыт почты',
+      message: 'Неправильный формат почты',
     },
-    password: {
-      type: String,
-      select: true,
-      required: true,
-    },
-    name: {
-      type: String,
-      minLength: 2,
-      maxLenght: 30,
-      required: false,
-      default: 'Жан-Люк Годар',
-    },
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
+  name: {
+    type: String,
+    minLength: 2,
+    maxLenght: 30,
+    required: false,
+    default: 'Жан-Люк Годар',
   },
 });
 
-// eslint-disable-next-line func-names
-userSchema.statics.findUserByCredentials = function (email, password) {
+userSchema.statics.findUserByCredentials = function findOne(email, password) {
   return this.findOne({ email })
     .select('+password')
     .then((user) => {
