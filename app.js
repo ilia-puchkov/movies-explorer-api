@@ -10,18 +10,20 @@ const router = require('./routes/index');
 const { cors } = require('./middlewares/cors');
 const { customError } = require('./middlewares/customError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { MONGO_DEV } = require('./utils/constants');
+const limiter = require('./middlewares/limiter');
 
+const { NODE_ENV, MONGO_URL } = process.env;
 const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(helmet());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
-  useUnifiedTopology: true,
-});
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : MONGO_DEV);
 
 app.use(requestLogger);
+app.use(limiter);
 app.use(cors);
 
 app.use(router);

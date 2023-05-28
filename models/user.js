@@ -5,6 +5,7 @@ const validator = require('validator');
 
 // Errors
 const AuthorizationError = require('../errors/AuthorizationError');
+const { INVALID_USER_MAIL_TEXT, INVALID_USER_AUTH_ERROR_TEXT } = require('../utils/errorConstants');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -13,7 +14,7 @@ const userSchema = mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validator.isEmail(v),
-      message: 'Неправильный формат почты',
+      message: INVALID_USER_MAIL_TEXT,
     },
   },
   password: {
@@ -24,9 +25,8 @@ const userSchema = mongoose.Schema({
   name: {
     type: String,
     minLength: 2,
-    maxLenght: 30,
-    required: false,
-    default: 'Жан-Люк Годар',
+    maxLength: 30,
+    required: true,
   },
 });
 
@@ -36,14 +36,14 @@ userSchema.statics.findUserByCredentials = function findOne(email, password) {
     .then((user) => {
       if (!user) {
         return Promise.reject(
-          new AuthorizationError('Неправильные почта или пароль'),
+          new AuthorizationError(INVALID_USER_AUTH_ERROR_TEXT),
         );
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
           return Promise.reject(
-            new AuthorizationError('Неправильные почта или пароль'),
+            new AuthorizationError(INVALID_USER_AUTH_ERROR_TEXT),
           );
         }
 

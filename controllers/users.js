@@ -7,11 +7,17 @@ const User = require('../models/user');
 
 // ENV elements
 const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET_DEV } = require('../utils/constants');
 
 // Error elements
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
+const {
+  INVALID_USER_DATA_TEXT,
+  USER_NOT_FOUND_TEXT,
+  USER_CONFICT_TEXT,
+} = require('../utils/errorConstants');
 
 // Controllers
 // GET (current user)
@@ -19,13 +25,13 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Данные не найдены');
+        throw new NotFoundError(USER_NOT_FOUND_TEXT);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(INVALID_USER_DATA_TEXT));
       } else {
         next(err);
       }
@@ -51,11 +57,9 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(INVALID_USER_DATA_TEXT));
       } else if (err.code === 11000) {
-        next(
-          new ConflictError('Пользователь с подобными данными уже существует'),
-        );
+        next(new ConflictError(USER_CONFICT_TEXT));
       } else {
         next(err);
       }
@@ -70,7 +74,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV,
         {
           expiresIn: '7d',
         },
@@ -92,13 +96,15 @@ const updateUserProfile = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Данные не найдены');
+        throw new NotFoundError(USER_NOT_FOUND_TEXT);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+      if (err.code === 11000) {
+        next(new ConflictError(USER_CONFICT_TEXT));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestError(INVALID_USER_DATA_TEXT));
       } else {
         next(err);
       }

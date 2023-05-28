@@ -4,6 +4,12 @@ const Movie = require('../models/movie');
 // Error elements
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
+const {
+  INVALID_MOVIE_DATA_TEXT,
+  MOVIE_NOT_FOUND_TEXT,
+  FORBIDDEN_MOVIE_TEXT,
+} = require('../utils/errorConstants');
 
 // GET (get movies)
 const getUserMovies = (req, res, next) => {
@@ -26,8 +32,8 @@ const createMovie = (req, res, next) => {
     trailerLink,
     thumbnail,
     movieId,
-    nameRu,
-    nameEn,
+    nameRU,
+    nameEN,
   } = req.body;
 
   Movie.create({
@@ -40,8 +46,8 @@ const createMovie = (req, res, next) => {
     trailerLink,
     thumbnail,
     movieId,
-    nameRu,
-    nameEn,
+    nameRU,
+    nameEN,
     owner: req.user._id,
   })
     .then((movie) => {
@@ -49,7 +55,7 @@ const createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(INVALID_MOVIE_DATA_TEXT));
       } else {
         next(err);
       }
@@ -58,22 +64,24 @@ const createMovie = (req, res, next) => {
 
 // DELETE
 const deleteMovie = (req, res, next) => {
-  const { movieId } = req.params;
-
-  Movie.findbyIdAndUpdate(
-    movieId,
-    { $pull: { owner: req.user._id } },
-    { new: true },
-  )
+  Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Данные не найдены');
+        throw new NotFoundError(MOVIE_NOT_FOUND_TEXT);
       }
-      return res.send(movie);
+      if (movie.owner.toString() !== req.user._id) {
+        throw new ForbiddenError(FORBIDDEN_MOVIE_TEXT);
+      }
+      movie
+        .deleteOne()
+        .then(() => {
+          res.send(movie);
+        })
+        .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(INVALID_MOVIE_DATA_TEXT));
       } else {
         next(err);
       }

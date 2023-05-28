@@ -1,8 +1,10 @@
+const AUTH_ERROR_CODE = require('../utils/errorConstants');
+
 class AuthorisationError extends Error {
   constructor(message) {
     super();
     this.message = message;
-    this.statusCode = 401;
+    this.statusCode = AUTH_ERROR_CODE; // 401
   }
 }
 

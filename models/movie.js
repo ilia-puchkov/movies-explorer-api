@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const INVALID_URL_FORMAT_TEXT = require('../utils/errorConstants');
+
 const movieSchema = mongoose.Schema({
   country: {
     type: String,
@@ -26,7 +28,7 @@ const movieSchema = mongoose.Schema({
     type: String,
     validate: {
       validator: (url) => validator.isURL(url),
-      message: 'Неправильный формат ссылки',
+      message: INVALID_URL_FORMAT_TEXT,
     },
     required: true,
   },
@@ -34,7 +36,7 @@ const movieSchema = mongoose.Schema({
     type: String,
     validate: {
       validator: (url) => validator.isURL(url),
-      message: 'Неправильный формат ссылки',
+      message: INVALID_URL_FORMAT_TEXT,
     },
     required: true,
   },
@@ -42,7 +44,7 @@ const movieSchema = mongoose.Schema({
     type: String,
     validate: {
       validator: (url) => validator.isURL(url),
-      message: 'Неправильный формат ссылки',
+      message: INVALID_URL_FORMAT_TEXT,
     },
     required: true,
   },
@@ -55,11 +57,11 @@ const movieSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  nameRu: {
+  nameRU: {
     type: String,
     required: true,
   },
-  nameEn: {
+  nameEN: {
     type: String,
     required: true,
   },
