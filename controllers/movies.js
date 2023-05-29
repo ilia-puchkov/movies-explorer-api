@@ -64,7 +64,9 @@ const createMovie = (req, res, next) => {
 
 // DELETE
 const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.movieId)
+  const { _id } = req.params;
+
+  Movie.findById({ _id })
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError(MOVIE_NOT_FOUND_TEXT);
@@ -73,7 +75,7 @@ const deleteMovie = (req, res, next) => {
         throw new ForbiddenError(FORBIDDEN_MOVIE_TEXT);
       }
       movie
-        .deleteOne()
+        .deleteOne({ _id })
         .then(() => {
           res.send(movie);
         })

@@ -14,6 +14,6 @@ const { validateMovie, validateMovieId } = require('../middlewares/validation');
 // Movie routes
 movieRouter.get('/', getUserMovies);
 movieRouter.post('/', validateMovie, createMovie);
-movieRouter.delete('/:movieId', validateMovieId, deleteMovie);
+movieRouter.delete('/:_id', validateMovieId, deleteMovie);
 
 module.exports = movieRouter;

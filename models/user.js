@@ -5,7 +5,10 @@ const validator = require('validator');
 
 // Errors
 const AuthorizationError = require('../errors/AuthorizationError');
-const { INVALID_USER_MAIL_TEXT, INVALID_USER_AUTH_ERROR_TEXT } = require('../utils/errorConstants');
+const {
+  INVALID_USER_MAIL_TEXT,
+  INVALID_USER_AUTH_ERROR_TEXT,
+} = require('../utils/errorConstants');
 
 const userSchema = mongoose.Schema({
   email: {
