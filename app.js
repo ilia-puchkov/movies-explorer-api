@@ -10,7 +10,7 @@ const router = require('./routes/index');
 const { cors } = require('./middlewares/cors');
 const { customError } = require('./middlewares/customError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { MONGO_URL } = require('./utils/constants');
+const { DB_URL } = require('./utils/constants');
 const limiter = require('./middlewares/limiter');
 
 const { PORT = 3000 } = process.env;
@@ -19,7 +19,7 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-mongoose.connect(MONGO_URL, {
+mongoose.connect(DB_URL, {
   useUnifiedTopology: true,
 });
 
