@@ -1,2 +1,18 @@
-# movies-explorer-api
-Repository for YA-praktikum diploma works (backEnd project part)
+# API movies (в рамках дипломной работы Яндекс.Практикум)
+
+### На основе:
+* NodeJS
+* Express
+* MongoDB
+
+### Функционал:
+* Регистрация пользователей
+* Авторизация пользователей
+* Обновление пользователя (основных данных)
+* Обработка списка фильмов
+* Создание фильмов (карточка фильма)
+
+## Доступ к проекту
+Публичный IP: 158.160.67.25
+
+Сервер API: https://api.movies-reras.students.nomoredomains.rocks/
